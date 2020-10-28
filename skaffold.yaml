@@ -1,0 +1,29 @@
+apiVersion: skaffold/v2beta5
+kind: Config
+build:
+  # tagPolicy:
+  #   customTemplate:
+  #     template: "{{.FOO}}_{{.BAR}}"
+  #     components:
+  #     - name: FOO
+  #       dateTime:
+  #         format: "2006-01-02"
+  #         timezone: "UTC"
+  #     - name: BAR
+  #       gitCommit:
+  #         variant: AbbrevCommitSha
+  artifacts:
+  - image: docker.io/michaelrichard/logapp
+    context: src
+deploy:
+  helm:
+    releases:
+    - name: logapp
+      chartPath: helm/logapp
+      artifactOverrides:
+        image: docker.io/michaelrichard/logapp
+      setValues:
+        ingress.enabled: true
+        ingress.tls[0].secretName: stormpath-wildcard-tls
+        ingress.tls[0].hosts[0]: logapp.stormpath.net
+        ingress.hosts[0].host: logapp.stormpath.net
