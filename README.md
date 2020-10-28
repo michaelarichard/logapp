@@ -52,6 +52,16 @@ curl -X POST -k -F file=@data/example.log https://logapp.stormpath.net/logfile  
 - Add tests
 
 
+## Status
+
+### Next steps
+
+Need to add an if range()? and if within ref value and build the response object.
+https://github.com/michaelarichard/logapp/blob/main/src/server.py#L95-L117
+
+Would be nice to add an endpoint to pass a log url pointing to something like s3 bucket instead of posting the whole file. would scale better.
+
+### current output
 ```
 ➜  logapp git:(master) ✗ curl -X POST -k -F file=@data/example.log https://logapp.stormpath.net/logfile  | jq
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
@@ -89,7 +99,7 @@ curl -X POST -k -F file=@data/example.log https://logapp.stormpath.net/logfile  
       "mean": 70.44,
       "stddev": 0.9044335243676014
     },
-    "reference": "70.0"
+    "reference": 70.0
   },
   "humidity": {
     "hum-1": {
@@ -112,7 +122,7 @@ curl -X POST -k -F file=@data/example.log https://logapp.stormpath.net/logfile  
       "mean": 43.82,
       "stddev": 1.0568822072492268
     },
-    "reference": "45.0"
+    "reference": 45.0
   }
 }
 ```
