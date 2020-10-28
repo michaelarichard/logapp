@@ -28,7 +28,7 @@ docker-compose up
 
 Post log file, ignoring self-signed cert for now.
 ```
-curl -k -F 'log_file=@data/example.log' https://localhost/upload
+curl -k -F 'log_file=@data/example.log' https://localhost/logfile
 ```
 
 
