@@ -80,39 +80,44 @@ def parselogs(logfile):
             sensors[s_type][s_name]['values'].append(float(value))
             float_values = list(map(float, sensors[s_type][s_name]['values']))
             sensors[s_type][s_name]['mean'] = statistics.mean(float_values)
-
+            sensors[s_type][s_name]['ref_humid'] = float(ref_humid)
+            sensors[s_type][s_name]['ref_temp'] = float(ref_temp)
             if len(float_values) >= 2:
                 sensors[s_type][s_name]['stddev'] = statistics.stdev(float_values)
 
     # Calculate pass/fail status
     # and then return result
-    sensors['humidity']['reference'] = float(ref_humid)
-    sensors['thermometer']['reference'] = float(ref_temp)
+    # sensors['humidity']['reference'] = float(ref_humid)
+    # sensors['thermometer']['reference'] = float(ref_temp)
     result = process_data(sensors)
-    result = sensors
+#    result = sensors
     return result
 
 def process_data(data):
     result = {}
+    result['results'] = {}
     for sensor_type in data:
         output = sensor_type
-        if sensor_type is 'thermometer':
-            # refactor to function
-            # temp_result = process_temp(data[sensor_type])
-            #  Calculate rating
-            # "ultra precise" if the mean of the readings is within 0.5 degrees of the known temperature, and the standard deviation is less than 3.
-            # "very precise" if the mean is within 0.5 degrees of the room, and the standard deviation is under 5
-            # "precise"
+        if sensor_type in 'thermometer':
             for s in data[sensor_type]:
-                result[s] = 'skip'
+                result['results'][s] = 'skip'
+                # refactor to function
+                # temp_result = process_temp(data[sensor_type])
 
-        if type is 'humidity':
-            #  Calculate result
-            # humid_result = process_humid(data[sensor_type])
-            # 2) For a humidity sensor, it must be discarded unless it is within 1 humidity percent of the reference value for all readings. (All humidity sensor
-            # readings are a decimal value representing percent moisture saturation.)
-            #
+                #  Calculate rating
+                # "ultra precise" if the mean of the readings is within 0.5 degrees of the known temperature, and the standard deviation is less than 3.
+                # "very precise" if the mean is within 0.5 degrees of the room, and the standard deviation is under 5
+                # "precise"
+
+
+        if sensor_type in 'humidity':
             for s in data[sensor_type]:
-                result[s] = s
-    # result = data[sensor_type]
+                result['results'][s] = 'skip'
+                #  Calculate result
+                # humid_result = process_humid(data[sensor_type])
+                # 2) For a humidity sensor, it must be discarded unless it is within 1 humidity percent of the reference value for all readings. (All humidity sensor
+                # readings are a decimal value representing percent moisture saturation.)
+ 
+ 
+    result['input_data'] = data[sensor_type]
     return result
