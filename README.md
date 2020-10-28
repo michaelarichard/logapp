@@ -1,4 +1,4 @@
-# CMG_APP
+# Sensor LOGAPP
 
 ## Vision:
 curl Post log files, parse and return expected reponse.  
@@ -44,7 +44,7 @@ Recommendations:
 
 
 ```
-➜  cmg_app git:(master) ✗ curl -X POST -k -F file=@data/example.log https://logapp.stormpath.net/logfile  | jq
+➜  logapp git:(master) ✗ curl -X POST -k -F file=@data/example.log https://logapp.stormpath.net/logfile  | jq
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100  1376  100   514  100   862   3777   6335 --:--:-- --:--:-- --:--:--  7495
@@ -106,5 +106,5 @@ Recommendations:
     "reference": "45.0"
   }
 }
-➜  cmg_app git:(master) ✗ 
+➜  logapp git:(master) ✗ 
 ```

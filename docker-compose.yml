@@ -1,7 +1,7 @@
 version: "3"
 services:
   logapp:
-    container_name: cmg_app_1
+    container_name: log_app_1
     # your code goes here ...
     command: ["flask", "run", "--host", "0.0.0.0"]
     build:
