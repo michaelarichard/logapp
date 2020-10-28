@@ -119,5 +119,5 @@ def process_data(data):
                 # readings are a decimal value representing percent moisture saturation.)
  
  
-    result['input_data'] = data[sensor_type]
+    result['input_data'] = data
     return result
