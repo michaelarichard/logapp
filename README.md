@@ -7,16 +7,16 @@ curl Post log files, parse and return expected reponse.
 - no local disk/streaming concerns.
 
 ## Setup
-Starting with a simple python flaskAPI app, running in a container. 
-(Copied from previous personal work, example hello-world microservice app best practices, secure SSL, gunicorn + local dev src mounted)
 
-Using nginx reverse proxy for local testing/development to simulate a simple k8s ingress.
+Starting with a simple python flaskAPI app, running in a container. 
+(Copied from previous personal example hello-world microservice app best practices, secure SSL, gunicorn + local dev src mounted)
+
+local dev started w/ nginx reverse proxy for local testing/development to simulate a simple k8s ingress.
 - allows for testing of forwarded headers, multiple services, ssl, etc as if in k8s. 
 
+Adding a helm chart + skaffold.yaml to skaffold dev on k8s.  ( Prerequisite: Requires docker.io or other container repo setup to transfer/deploy )
 
-TODO: Adding a helm chart + skaffold.yaml to skaffold dev on k8s.  ( Prerequisite: Requires docker.io or other container repo setup to transfer/deploy )
-
-TODO: Parse log file and return expected response. 
+Parse log file and return expected response. 
 
 ## Usage
 
@@ -40,13 +40,13 @@ skaffold dev
 curl -X POST -k -F file=@data/example.log https://logapp.stormpath.net/logfile  | jq
 ```
 
-### Time tracking
+## Time tracking
  - 45 mins, Setup project, copy existing hello world docker-compose flaskapi app framework, setup test file, name objects, prepare/cleanup local docker test env.
  - 1hr add helm chart w/ skaffold and determine curl post file - parse / response
  - 3 distracted/interrupted hrs writing code to parse log file and calculate pass/fail - Not done yet but close. (see output below)
  - Hit time limit working on working out numpy/statistics math tests and formatting of result response.
 
-### Recommendations
+## Recommendations
 - Log file format -> into complete json objects,  including type, id, and ref data in all lines. 
 - copntinue refactoring a lot into functions for easier maintainable and support of more sensor types. 
 - Add tests
