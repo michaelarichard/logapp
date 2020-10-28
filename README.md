@@ -40,13 +40,13 @@ skaffold dev
 curl -X POST -k -F file=@data/example.log https://logapp.stormpath.net/logfile  | jq
 ```
 
-# Time log: 
+### Time tracking
  - 45 mins, Setup project, copy existing hello world docker-compose flaskapi app framework, setup test file, name objects, prepare/cleanup local docker test env.
  - 1hr add helm chart w/ skaffold and determine curl post file - parse / response
- - + 3 distracted hrs writing code to parse log file and calculate pass/fail - Not done yet but close. (see output below)
+ - 3 distracted/interrupted hrs writing code to parse log file and calculate pass/fail - Not done yet but close. (see output below)
  - Hit time limit working on working out numpy/statistics math tests and formatting of result response.
 
-Recommendations: 
+### Recommendations
 - Log file format -> into complete json objects,  including type, id, and ref data in all lines. 
 - copntinue refactoring a lot into functions for easier maintainable and support of more sensor types. 
 - Add tests
