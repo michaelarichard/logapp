@@ -75,29 +75,67 @@ Would be nice to add an endpoint to pass a log url pointing to something like s3
     "hum-2": "skip"
   },
   "input_data": {
-    "hum-1": {
-      "values": [
-        45.2,
-        45.3,
-        45.1
-      ],
-      "mean": 45.2,
-      "stddev": 0.09999999999999787,
-      "ref_humid": 45,
-      "ref_temp": 70
+    "thermometer": {
+      "temp-1": {
+        "values": [
+          72.4,
+          76,
+          79.1,
+          75.6,
+          71.2,
+          71.4,
+          69.2,
+          65.2,
+          62.8,
+          61.4,
+          64,
+          67.5,
+          69.4
+        ],
+        "mean": 69.63076923076923,
+        "stddev": 5.397898451463096,
+        "ref_humid": 45,
+        "ref_temp": 70
+      },
+      "temp-2": {
+        "values": [
+          69.5,
+          70.1,
+          71.3,
+          71.5,
+          69.8
+        ],
+        "mean": 70.44,
+        "stddev": 0.9044335243676014,
+        "ref_humid": 45,
+        "ref_temp": 70
+      }
     },
-    "hum-2": {
-      "values": [
-        44.4,
-        43.9,
-        44.9,
-        43.8,
-        42.1
-      ],
-      "mean": 43.82,
-      "stddev": 1.0568822072492268,
-      "ref_humid": 45,
-      "ref_temp": 70
+    "humidity": {
+      "hum-1": {
+        "values": [
+          45.2,
+          45.3,
+          45.1
+        ],
+        "mean": 45.2,
+        "stddev": 0.09999999999999787,
+        "ref_humid": 45,
+        "ref_temp": 70
+      },
+      "hum-2": {
+        "values": [
+          44.4,
+          43.9,
+          44.9,
+          43.8,
+          42.1
+        ],
+        "mean": 43.82,
+        "stddev": 1.0568822072492268,
+        "ref_humid": 45,
+        "ref_temp": 70
+      }
     }
   }
 }
