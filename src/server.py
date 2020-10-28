@@ -86,15 +86,16 @@ def parselogs(logfile):
 
     # Calculate pass/fail status
     # and then return result
-    sensors['humidity']['reference'] = ref_humid
-    sensors['thermometer']['reference'] = ref_temp
+    sensors['humidity']['reference'] = float(ref_humid)
+    sensors['thermometer']['reference'] = float(ref_temp)
     result = process_data(sensors)
-    # result = sensors
+    result = sensors
     return result
 
 def process_data(data):
     result = {}
     for sensor_type in data:
+        output = sensor_type
         if sensor_type is 'thermometer':
             # refactor to function
             # temp_result = process_temp(data[sensor_type])
@@ -108,7 +109,10 @@ def process_data(data):
         if type is 'humidity':
             #  Calculate result
             # humid_result = process_humid(data[sensor_type])
+            # 2) For a humidity sensor, it must be discarded unless it is within 1 humidity percent of the reference value for all readings. (All humidity sensor
+            # readings are a decimal value representing percent moisture saturation.)
             #
             for s in data[sensor_type]:
-                result[s] = 'skip'
-    return data
+                result[s] = s
+    # result = data[sensor_type]
+    return result
