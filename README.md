@@ -28,7 +28,11 @@ docker-compose up
 
 Post log file, ignoring self-signed cert for now.
 ```
+# logfile (local log post)
 curl -k -F 'file=@data/example.log' https://localhost/logfile
+
+# logpath (url to remote log)
+curl -X POST -d 'logpath=https://raw.githubusercontent.com/michaelarichard/logapp/main/data/example.log' https://localhost/logpath
 ```
 
 
@@ -38,6 +42,7 @@ skaffold dev
 ```
 ```
 curl -X POST -k -F file=@data/example.log https://logapp.stormpath.net/logfile  | jq
+curl -X POST -d 'logpath=https://raw.githubusercontent.com/michaelarichard/logapp/main/data/example.log' https://logapp.stormpath.net/logpath
 ```
 
 ## Time tracking
@@ -45,6 +50,7 @@ curl -X POST -k -F file=@data/example.log https://logapp.stormpath.net/logfile  
  - 1hr add helm chart w/ skaffold and determine curl post file - parse / response
  - 3 distracted/interrupted hrs writing code to parse log file and calculate pass/fail - Not done yet but close. (see output below)
  - Hit time limit working on working out numpy/statistics math tests and formatting of result response.
+ - After communicating status, added another hour+ to finalize result response, and threw in the logpath option for fun. 
 
 ## Recommendations
 - Log file format -> into complete json objects,  including type, id, and ref data in all lines. 
