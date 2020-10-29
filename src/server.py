@@ -5,6 +5,7 @@ from io import StringIO
 from werkzeug.utils import secure_filename
 import re
 import statistics
+from decimal import Decimal
 app = FlaskAPI(__name__)
 
 
@@ -91,7 +92,7 @@ def parselogs(logfile):
     # sensors['thermometer']['reference'] = float(ref_temp)
     result = process_data(sensors)
 #    result = sensors
-    return result
+    return result['results']
 
 def process_data(data):
     result = {}
@@ -100,24 +101,34 @@ def process_data(data):
         output = sensor_type
         if sensor_type in 'thermometer':
             for s in data[sensor_type]:
-                result['results'][s] = 'skip'
-                # refactor to function
-                # temp_result = process_temp(data[sensor_type])
-
+                # TODO: refactor these out to functions for each type
                 #  Calculate rating
                 # "ultra precise" if the mean of the readings is within 0.5 degrees of the known temperature, and the standard deviation is less than 3.
                 # "very precise" if the mean is within 0.5 degrees of the room, and the standard deviation is under 5
                 # "precise"
-
-
+                ref_temp = data[sensor_type][s]['ref_temp']
+                mean = data[sensor_type][s]['mean']
+                stddev = data[sensor_type][s]['stddev']
+                if abs(Decimal(ref_temp) - Decimal(mean)) < Decimal(0.5) and stddev < 3 :
+                    rating = 'ultra precise'
+                elif abs(Decimal(ref_temp) - Decimal(mean)) < Decimal(0.5) and stddev < 5 :
+                    rating = 'very precise'
+                else:
+                    rating = 'precise'
+                result['results'][s] = rating
+    
         if sensor_type in 'humidity':
             for s in data[sensor_type]:
-                result['results'][s] = 'skip'
                 #  Calculate result
                 # humid_result = process_humid(data[sensor_type])
                 # 2) For a humidity sensor, it must be discarded unless it is within 1 humidity percent of the reference value for all readings. (All humidity sensor
                 # readings are a decimal value representing percent moisture saturation.)
- 
- 
+                ref_humid = data[sensor_type][s]['ref_humid']
+                values = data[sensor_type][s]['values']
+                rating = 'keep' # default
+                for v in values:
+                    if abs(Decimal(ref_humid) - Decimal(v)) > 1 :
+                        rating = 'discard'
+                result['results'][s] = rating
     result['input_data'] = data
     return result
