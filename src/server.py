@@ -120,7 +120,6 @@ def process_data(data):
     result = {}
     result['results'] = {}
     for sensor_type in data:
-        output = sensor_type
         if sensor_type in 'thermometer':
             for s in data[sensor_type]:
                 result['results'][s] = validate_temp(data[sensor_type][s])

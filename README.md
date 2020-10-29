@@ -38,7 +38,14 @@ curl -X POST -d 'logpath=https://raw.githubusercontent.com/michaelarichard/logap
 
 ### or if k8s context is available. (edit skaffold.yaml is currently hardcoded to my domain/ingress)
 ```
+# continuous deploy on edit, somtimes buggy and requires ctrl-d + rerun
 skaffold dev
+
+or 
+
+# single build + deploy
+skaffold run
+
 ```
 ```
 curl -X POST -k -F file=@data/example.log https://logapp.stormpath.net/logfile  | jq
