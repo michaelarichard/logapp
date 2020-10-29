@@ -55,13 +55,39 @@ curl -X POST -k -F file=@data/example.log https://logapp.stormpath.net/logfile  
 ## Status
 
 ### Next steps
+DONE - Complete result reponse building.
+DONE - Would be nice to add an endpoint to pass a log url pointing to something like s3 bucket instead of posting the whole file. would scale better.
+TODO - Add validation/safe inputs, etc. More tests, etc. 
 
-Need to add an if range()? and if within ref value and build the response object.
-https://github.com/michaelarichard/logapp/blob/main/src/server.py#L95-L117
+### Examples
 
-Would be nice to add an endpoint to pass a log url pointing to something like s3 bucket instead of posting the whole file. would scale better.
-
-### current output
+#### Post the whole log file. 
+```
+curl -X POST -k -F file=@data/example.log https://logapp.stormpath.net/logfile  | jq                                                      
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   947  100    85  100   862    607   6162 --:--:-- --:--:-- --:--:--  7367
+{
+  "temp-1": "precise",
+  "temp-2": "ultra precise",
+  "hum-1": "keep",
+  "hum-2": "discard"
+}
+```
+##### Post a log file by url (More scalable, allows hosting of files somewhere like s3)
+```
+curl -X POST -d 'logpath=https://raw.githubusercontent.com/michaelarichard/logapp/main/data/example.log' https://logapp.stormpath.net/logpath | jq
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   171  100    85  100    86    387    391 --:--:-- --:--:-- --:--:--   432
+{
+  "temp-1": "precise",
+  "temp-2": "ultra precise",
+  "hum-1": "keep",
+  "hum-2": "discard"
+}
+```
+### hidden output (TODO: make this visible w/ a debug flag)
 ```
 ➜  logapp git:(master) ✗ curl -X POST -k -F file=@data/example.log https://logapp.stormpath.net/logfile  | jq
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
@@ -69,10 +95,10 @@ Would be nice to add an endpoint to pass a log url pointing to something like s3
 100  1376  100   514  100   862   3777   6335 --:--:-- --:--:-- --:--:--  7495
 {
   "results": {
-    "temp-1": "skip",
-    "temp-2": "skip",
-    "hum-1": "skip",
-    "hum-2": "skip"
+    "temp-1": "precise",
+    "temp-2": "ultra precise",
+    "hum-1": "keep",
+    "hum-2": "discard"
   },
   "input_data": {
     "thermometer": {

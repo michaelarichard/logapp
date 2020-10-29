@@ -2,3 +2,4 @@ Flask==1.1.1
 gunicorn==19.9.0
 flask-api==2.0
 statistics==1.0.3.5
+requests

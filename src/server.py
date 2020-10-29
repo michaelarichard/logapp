@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 import re
 import statistics
 from decimal import Decimal
+import requests
 app = FlaskAPI(__name__)
 
 
@@ -49,6 +50,22 @@ def task_postlog():
             # filename = secure_filename(logfile.filename)
             # return filename
 
+@app.route('/logpath', methods=['POST'])
+def task_postlogpath():
+    """
+    Accept a url path and parse to return the output.
+    """
+    if request.method == 'GET':
+        return "post a file url"
+    else: 
+        logpath = request.data['logpath']
+        if logpath:
+            logfile = requests.get(logpath)
+            result = parselogs(StringIO(logfile.text))
+            resp = make_response(result)
+            resp.status_code = 200
+            return resp
+ 
 def parselogs(logfile):
     """
     Parse existing logfile format.
