@@ -32,7 +32,7 @@ Post log file, ignoring self-signed cert for now.
 curl -k -F 'file=@data/example.log' https://localhost/logfile
 
 # logpath (url to remote log)
-curl -X POST -d 'logpath=https://raw.githubusercontent.com/michaelarichard/logapp/main/data/example.log' https://localhost/logpath
+curl -k -X POST -d 'logpath=https://raw.githubusercontent.com/michaelarichard/logapp/main/data/example.log' https://localhost/logpath
 ```
 
 
@@ -49,7 +49,7 @@ skaffold run
 
 ```
 ```
-curl -X POST -k -F file=@data/example.log https://logapp.stormpath.net/logfile  | jq
+curl -X POST -F file=@data/example.log https://logapp.stormpath.net/logfile  | jq
 curl -X POST -d 'logpath=https://raw.githubusercontent.com/michaelarichard/logapp/main/data/example.log' https://logapp.stormpath.net/logpath
 ```
 

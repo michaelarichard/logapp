@@ -102,12 +102,12 @@ def parselogs(logfile):
             timestamp = line.split()[0]
             value = line.split()[1]
             sensors[s_type][s_name]['values'].append(Decimal(value))
-            float_values = list(map(Decimal, sensors[s_type][s_name]['values']))
-            sensors[s_type][s_name]['mean'] = statistics.mean(float_values)
+#            float_values = list(map(Decimal, sensors[s_type][s_name]['values']))
+            sensors[s_type][s_name]['mean'] = statistics.mean(sensors[s_type][s_name]['values'])
             sensors[s_type][s_name]['ref_humid'] = Decimal(ref_humid)
             sensors[s_type][s_name]['ref_temp'] = Decimal(ref_temp)
-            if len(float_values) >= 2:
-                sensors[s_type][s_name]['stddev'] = statistics.stdev(float_values)
+            if len(sensors[s_type][s_name]['values']) >= 2:
+                sensors[s_type][s_name]['stddev'] = statistics.stdev(sensors[s_type][s_name]['values'])
 
     # Calculate rating
     # and then return result
