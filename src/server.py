@@ -11,6 +11,10 @@ app = FlaskAPI(__name__)
 
 @app.route('/')
 def index():
+    """
+    Default route, used as a health/readiness check for k8s deployment and troubleshooting of source IP
+    Could be expanded to included more intelligence for a complex healthcheck
+    """
     content = "Hello World."
     fwd_for = "X-Forwarded-For: {}".format(
         request.headers.get('x-forwarded-for', None)
@@ -46,7 +50,11 @@ def task_postlog():
             # return filename
 
 def parselogs(logfile):
-    # TODO: Propose new log format
+    """
+    Parse existing logfile format.
+    Propose new log format
+    A json format log file w key, value including name, type, ref, time, and value for each sample line would allow us to simplify this parsing loop
+    """
     ref_string = ("reference")
     sensor_types = ("thermometer", "humidity")
     timestamp_regex = r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}'
@@ -76,18 +84,20 @@ def parselogs(logfile):
         if re.match(timestamp_regex, line):
             timestamp = line.split()[0]
             value = line.split()[1]
-            sensors[s_type][s_name]['values'].append(float(value))
-            float_values = list(map(float, sensors[s_type][s_name]['values']))
+            sensors[s_type][s_name]['values'].append(Decimal(value))
+            float_values = list(map(Decimal, sensors[s_type][s_name]['values']))
             sensors[s_type][s_name]['mean'] = statistics.mean(float_values)
-            sensors[s_type][s_name]['ref_humid'] = float(ref_humid)
-            sensors[s_type][s_name]['ref_temp'] = float(ref_temp)
+            sensors[s_type][s_name]['ref_humid'] = Decimal(ref_humid)
+            sensors[s_type][s_name]['ref_temp'] = Decimal(ref_temp)
             if len(float_values) >= 2:
                 sensors[s_type][s_name]['stddev'] = statistics.stdev(float_values)
 
-    # Calculate pass/fail status
+    # Calculate rating
     # and then return result
     result = process_data(sensors)
     return result['results']
+    # Suggest returning full result with input values might assist with troubleshooting bad input data later.
+    # return result
 
 def process_data(data):
     result = {}
@@ -106,8 +116,10 @@ def process_data(data):
 
 
 def validate_humid(data):
-    # 2) For a humidity sensor, it must be discarded unless it is within 1 humidity percent of the reference value for all readings. (All humidity sensor
-    # readings are a decimal value representing percent moisture saturation.)
+    """
+    For a humidity sensor, it must be discarded unless it is within 1 humidity percent of the reference value for all readings. (All humidity sensor
+    readings are a decimal value representing percent moisture saturation.)
+    """
     ref_humid = data['ref_humid']
     values = data['values']
     rating = 'keep' # default
@@ -117,10 +129,12 @@ def validate_humid(data):
     return rating
 
 def validate_temp(data):
-    #  Calculate rating
-    # "ultra precise" if the mean of the readings is within 0.5 degrees of the known temperature, and the standard deviation is less than 3.
-    # "very precise" if the mean is within 0.5 degrees of the room, and the standard deviation is under 5
-    # "precise"
+    """
+    Calculate rating of a temp sensor
+    "ultra precise" if the mean of the readings is within 0.5 degrees of the known temperature, and the standard deviation is less than 3.
+    "very precise" if the mean is within 0.5 degrees of the room, and the standard deviation is under 5
+    "precise"
+    """
     ref_temp = data['ref_temp']
     mean = data['mean']
     stddev = data['stddev']
