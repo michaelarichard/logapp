@@ -54,8 +54,8 @@ curl -X POST -d 'logpath=https://raw.githubusercontent.com/michaelarichard/logap
 
 ## Recommendations
 - Log file format -> into complete json objects,  including type, id, and ref data in all lines. 
-- copntinue refactoring a lot into functions for easier maintainable and support of more sensor types. 
-- Add tests
+- copntinue refactoring a lot into functions for easier maintainable and support of more sensor types. a handler? might scale better.
+- Add tests/validation along with verbosity/debug output flags.
 
 
 ## Status
