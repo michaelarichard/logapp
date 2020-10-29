@@ -1,7 +1,7 @@
 # Sensor LOGAPP
 
 ## Vision:
-curl Post log files, parse and return expected reponse.  
+Post a log file or url path to parse and return expected reponse.  
 - microservice API/scalable
 - deployable to k8s
 - no local disk/streaming concerns.
@@ -26,7 +26,7 @@ docker-compose up
 
 ```
 
-Post log file, ignoring self-signed cert for now.
+Post log file, ignoring self-signed cert when testing localhost.
 ```
 # logfile (local log post)
 curl -k -F 'file=@data/example.log' https://localhost/logfile
@@ -52,6 +52,12 @@ skaffold run
 curl -X POST -F file=@data/example.log https://logapp.stormpath.net/logfile  | jq
 curl -X POST -d 'logpath=https://raw.githubusercontent.com/michaelarichard/logapp/main/data/example.log' https://logapp.stormpath.net/logpath
 ```
+
+## endpoints
+### /logfile
+ - POST a file to scan as the 'file' param
+### /logpath
+ - POST a url to scan as the 'logpath' param
 
 ## Time tracking
  - 45 mins, Setup project, copy existing hello world docker-compose flaskapi app framework, setup test file, name objects, prepare/cleanup local docker test env.
