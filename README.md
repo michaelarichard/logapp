@@ -36,7 +36,8 @@ curl -X POST -d 'logpath=https://raw.githubusercontent.com/michaelarichard/logap
 ```
 
 
-### or if k8s context is available. (edit skaffold.yaml is currently hardcoded to my domain/ingress)
+### or if k8s context is available. 
+  edit skaffold.yaml, it is currently hardcoded to my domain/ingress. Left it up, feel free to test!
 ```
 # continuous deploy on edit, somtimes buggy and requires ctrl-d + rerun
 skaffold dev
