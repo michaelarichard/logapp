@@ -30,9 +30,9 @@ def index():
 
 @app.route('/logfile', methods=['POST','PUT'])
 def task_postlog():
-#     """
-#     Accept a file and parse to return the output.
-#     """
+    """
+    Accept a file and parse to return the output.
+    """
     if request.method == 'GET':
         return "post a file"
     else:
@@ -46,15 +46,13 @@ def task_postlog():
             # return filename
 
 def parselogs(logfile):
-
-    # TODO: Refactor into testable, maintanable functions.
     # TODO: Propose new log format
     ref_string = ("reference")
     sensor_types = ("thermometer", "humidity")
     timestamp_regex = r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}'
     sensors = {}
 
-    # parse this ugly log file into dictionaries to process
+    # parse the log file into dictionaries to process
     for line in logfile:
         # find reference line
         if ref_string in line:
@@ -88,10 +86,7 @@ def parselogs(logfile):
 
     # Calculate pass/fail status
     # and then return result
-    # sensors['humidity']['reference'] = float(ref_humid)
-    # sensors['thermometer']['reference'] = float(ref_temp)
     result = process_data(sensors)
-#    result = sensors
     return result['results']
 
 def process_data(data):
@@ -101,34 +96,38 @@ def process_data(data):
         output = sensor_type
         if sensor_type in 'thermometer':
             for s in data[sensor_type]:
-                # TODO: refactor these out to functions for each type
-                #  Calculate rating
-                # "ultra precise" if the mean of the readings is within 0.5 degrees of the known temperature, and the standard deviation is less than 3.
-                # "very precise" if the mean is within 0.5 degrees of the room, and the standard deviation is under 5
-                # "precise"
-                ref_temp = data[sensor_type][s]['ref_temp']
-                mean = data[sensor_type][s]['mean']
-                stddev = data[sensor_type][s]['stddev']
-                if abs(Decimal(ref_temp) - Decimal(mean)) < Decimal(0.5) and stddev < 3 :
-                    rating = 'ultra precise'
-                elif abs(Decimal(ref_temp) - Decimal(mean)) < Decimal(0.5) and stddev < 5 :
-                    rating = 'very precise'
-                else:
-                    rating = 'precise'
-                result['results'][s] = rating
+                result['results'][s] = validate_temp(data[sensor_type][s])
     
         if sensor_type in 'humidity':
             for s in data[sensor_type]:
-                #  Calculate result
-                # humid_result = process_humid(data[sensor_type])
-                # 2) For a humidity sensor, it must be discarded unless it is within 1 humidity percent of the reference value for all readings. (All humidity sensor
-                # readings are a decimal value representing percent moisture saturation.)
-                ref_humid = data[sensor_type][s]['ref_humid']
-                values = data[sensor_type][s]['values']
-                rating = 'keep' # default
-                for v in values:
-                    if abs(Decimal(ref_humid) - Decimal(v)) > 1 :
-                        rating = 'discard'
-                result['results'][s] = rating
+                result['results'][s] = validate_humid(data[sensor_type][s])
     result['input_data'] = data
     return result
+
+
+def validate_humid(data):
+    # 2) For a humidity sensor, it must be discarded unless it is within 1 humidity percent of the reference value for all readings. (All humidity sensor
+    # readings are a decimal value representing percent moisture saturation.)
+    ref_humid = data['ref_humid']
+    values = data['values']
+    rating = 'keep' # default
+    for v in values:
+        if abs(Decimal(ref_humid) - Decimal(v)) > 1 :
+            rating = 'discard'
+    return rating
+
+def validate_temp(data):
+    #  Calculate rating
+    # "ultra precise" if the mean of the readings is within 0.5 degrees of the known temperature, and the standard deviation is less than 3.
+    # "very precise" if the mean is within 0.5 degrees of the room, and the standard deviation is under 5
+    # "precise"
+    ref_temp = data['ref_temp']
+    mean = data['mean']
+    stddev = data['stddev']
+    if abs(Decimal(ref_temp) - Decimal(mean)) < Decimal(0.5) and stddev < 3 :
+        rating = 'ultra precise'
+    elif abs(Decimal(ref_temp) - Decimal(mean)) < Decimal(0.5) and stddev < 5 :
+        rating = 'very precise'
+    else:
+        rating = 'precise'
+    return rating
