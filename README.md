@@ -69,9 +69,9 @@ curl -X POST -d 'logpath=https://raw.githubusercontent.com/michaelarichard/logap
 ## Status
 
 ### Next steps
-DONE - Complete result reponse building.
-DONE - Would be nice to add an endpoint to pass a log url pointing to something like s3 bucket instead of posting the whole file. would scale better.
-TODO - Add validation/safe inputs, etc. More tests, etc. 
+- DONE - Complete result reponse building.
+- DONE - Would be nice to add an endpoint to pass a log url pointing to something like s3 bucket instead of posting the whole file. would scale better.
+- TODO - Add validation/safe inputs, etc. More tests, etc. 
 
 ### Examples
 
